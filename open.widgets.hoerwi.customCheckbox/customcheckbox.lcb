@@ -50,18 +50,18 @@ Summary: the Icon of the checker can be changed
 
 
 
-widget open.widget.hoerwi.customcheckbox
+widget org.openxtalk.hoerwi.customcheckbox
 
 	use com.livecode.canvas
 	use com.livecode.widget
 	use com.livecode.engine
-	
+
 	metadata title is "custom Checkbox"
 	metadata author is "Andreas Strauch"
 	metadata version is "1.0.0"
 	metadata svgicon is "M26.667 110.000 C 13.046 123.621,13.046 276.379,26.667 290.000 C 40.287 303.621,193.046 303.621,206.667 290.000 C 220.287 276.379,220.287 123.621,206.667 110.000 C 193.046 96.379,40.287 96.379,26.667 110.000 M178.571 138.095 C 196.640 156.164,196.640 243.836,178.571 261.905 C 169.648 270.828,149.928 275.000,116.667 275.000 C 52.729 275.000,41.667 263.938,41.667 200.000 C 41.667 136.062,52.729 125.000,116.667 125.000 C 149.928 125.000,169.648 129.172,178.571 138.095 M122.841 180.947 C 105.111 198.677,98.043 201.376,90.114 193.447 C 75.092 178.425,58.333 181.200,58.333 198.708 C 58.333 216.576,83.282 241.667,101.048 241.667 C 115.611 241.667,175.000 182.827,175.000 168.399 C 175.000 150.676,146.177 157.610,122.841 180.947 M250.000 200.000 C 250.000 215.278,255.556 216.667,316.667 216.667 C 377.778 216.667,383.333 215.278,383.333 200.000 C 383.333 184.722,377.778 183.333,316.667 183.333 C 255.556 183.333,250.000 184.722,250.000 200.000"
 	metadata preferredSize is "150,40"
-	
+
 	private variable mTheme as String
 	private variable mCheckStyle as String
 	private variable mLabel as String
@@ -70,50 +70,50 @@ widget open.widget.hoerwi.customcheckbox
 	private variable tPath as Path
 	private variable tAlign as Boolean
 
-		
+
 	property label 				get mLabel 		set setLabel
 		metadata label.editor is "com.livecode.pi.string"
 		metadata label.default is "custom Checkbox"
 		metadata label.label is "Label"
-		
+
 	property flip				get tAlign 		set setAlign
 		metadata flip.default is "false"
 		metadata flip.label is "Flip"
-		
+
 	property theme				get mTheme 		set setTheme
 		metadata theme.editor is "com.livecode.pi.enum"
 		metadata theme.options is "square,round,circle"
 		metadata theme.default is "square"
 		metadata theme.label is "Theme"
-	
+
 	property checkstyle			get mCheckStyle set setCheckStyle
 		metadata checkstyle.editor is "com.livecode.pi.enum"
 		metadata checkstyle.options is "check,cross"
 		metadata checkstyle.default is "check"
 		metadata checkstyle.label is "Theme"
-		
+
 	property checked			get mChecked 	set setChecked
 		metadata checked.default is "false"
 		metadata checked.label is "is checked"
-		
-	
+
+
 	constant kPadding is 15
 	constant kWidth is 16
-	
+
 -- Theme
 
--- Handler	
-	
+-- Handler
+
 	public handler setTheme(in pTheme as String) returns nothing
 		put pTheme into mTheme
 		redraw all
 	end handler
-	
+
 	public handler setAlign(in pAlign as Boolean) returns nothing
 		put pAlign into tAlign
 		redraw all
 	end handler
-	
+
 	public handler setCheckStyle(in pCheckStyle as String) returns nothing
 		put pCheckStyle into mCheckStyle
 		redraw all
@@ -127,9 +127,9 @@ widget open.widget.hoerwi.customcheckbox
 	public handler setChecked(in pChecked as Boolean) returns nothing
 		put pChecked into mChecked
 		redraw all
-	end handler	
-	
-	
+	end handler
+
+
 	private handler getLabelRect() returns Rectangle
 		variable tLabelRect as Rectangle
 		put my bounds into tLabelRect
@@ -139,8 +139,8 @@ widget open.widget.hoerwi.customcheckbox
 			add kPadding+kWidth+5 to the x of tLabelRect
 		end if
 		return tLabelRect
-	end handler	
-	
+	end handler
+
 	private handler getIcon() returns Rectangle
 		variable tIconRect as Rectangle
 		put my bounds into tIconRect
@@ -150,7 +150,7 @@ widget open.widget.hoerwi.customcheckbox
 			else
 				add 2/kPadding-kWidth-1.25 to the x of tIconRect
 			end if
-			
+
 			add 2/my height-0.75 to the y of tIconRect
 		else
 			if mCheckStyle is "check" then
@@ -158,15 +158,15 @@ widget open.widget.hoerwi.customcheckbox
 			else
 				add kPadding+2.5 to the x of tIconRect
 			end if
-			
+
 			add 2/my height-0.75 to the y of tIconRect
 		end if
-		
+
 		return tIconRect
-	end handler	
-	
--- Standards	
-	
+	end handler
+
+-- Standards
+
 	public handler OnSave(out rProperties as Array)
 		put the empty array into rProperties
 		put mCheckStyle into rProperties["checkstyle"]
@@ -191,38 +191,38 @@ widget open.widget.hoerwi.customcheckbox
 		put false into mChecked
 		put false into tAlign
 		put "" into mState
-	end handler	
-	
+	end handler
+
 -- Mouse actions
 
 	public handler OnMouseDown()
 		put "pressed" into mState
 		redraw all
 	end handler
-	
+
 	public handler OnMouseUp()
 		put "" into mState
 		setChecked(not(mChecked))
 		redraw all
     	post "mouseUp" with [mLabel]
 	end handler
-	
 
-	
+
+
 -- onPaint
 
 	public handler onPaint()
 	set the stroke width of this canvas to 1.5
 	variable tFont as String
-	
+
 		if mCheckStyle is "check" then
 			put "\u{f00c}" into tFont
 		else if mCheckStyle is "cross" then
 			put "\u{f00d}" into tFont
 		end if
-		
+
 	-- Checkbox
-	
+
 		if tAlign then
 		if mTheme is "round" then
 		 		put rounded rectangle path of rectangle [my width - kPadding*2, my height/2 - kWidth/2, my width-kPadding*2+kWidth, my height/2 + kWidth/2] with radius 3 into tPath
@@ -230,16 +230,16 @@ widget open.widget.hoerwi.customcheckbox
 				put rectangle path of rectangle [my width - kPadding*2, my height/2 - kWidth/2, my width-kPadding*2+kWidth, my height/2 + kWidth/2] into tPath
 			else if mTheme is "circle" then
 				put rounded rectangle path of rectangle [my width - kPadding*2, my height/2 - kWidth/2, my width-kPadding*2+kWidth, my height/2 + kWidth/2] with radius 45 into tPath
-			end if	
+			end if
 			stroke tPath on this canvas
-			
+
 			fill text mLabel at right of getLabelRect() on this canvas
-			
+
 			if mChecked is true then
 				set the font of this canvas to font "fontawesome" at size 13
 				fill text tFont at right of getIcon() on this canvas
 			end if
-			
+
 		else
 			if mTheme is "round" then
 		 		put rounded rectangle path of rectangle [kPadding, my height/2 - kWidth/2, kPadding+kWidth, my height/2 + kWidth/2] with radius 3 into tPath
@@ -247,31 +247,31 @@ widget open.widget.hoerwi.customcheckbox
 				put rectangle path of rectangle [kPadding, my height/2 - kWidth/2, kPadding+kWidth, my height/2 + kWidth/2] into tPath
 			else if mTheme is "circle" then
 				put rounded rectangle path of rectangle [kPadding, my height/2 - kWidth/2, kPadding+kWidth, my height/2 + kWidth/2] with radius 45 into tPath
-			end if	
+			end if
 			stroke tPath on this canvas
-		
+
 			fill text mLabel at left of getLabelRect() on this canvas
-			
+
 			if mChecked is true then
 				set the font of this canvas to font "fontawesome" at size 13
 				fill text tFont at left of getIcon() on this canvas
 			end if
-		
-		
+
+
 
 		end if
-		
-	
-	
-		
-		
-	end handler
-	
-	
-	
-	
-	
 
-	
-	
+
+
+
+
+	end handler
+
+
+
+
+
+
+
+
 end widget
