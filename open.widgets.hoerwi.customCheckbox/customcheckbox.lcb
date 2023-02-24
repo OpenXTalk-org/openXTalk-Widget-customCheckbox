@@ -45,6 +45,13 @@ Syntax: set the checkstyle of <widget> to check|cross
 
 Summary: the Icon of the checker can be changed
 
+
+Name: mouseUp
+Type: message
+
+Name: mouseDown
+Type: message
+
 */
 
 
